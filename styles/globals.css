@@ -1,0 +1,192 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body,
+html {
+    @apply bg-white overflow-x-hidden;
+    scroll-behavior: smooth;
+}
+
+
+a[href^="http://maps.google.com/maps"],a[href^="https://maps.google.com/maps"] {
+     display: none !important;
+}
+.gmnoprint a,.gmnoprint span,.gm-style-cc {
+    display: none;
+}
+
+@layer components {
+
+    .nav_linkActive {
+        @apply my-[5px] md:my-0 bg-[#F1592A] border-2 border-[#F1592A] rounded-xl text-white text-[15px] leading-[18px] md:text-[15px] md:leading-[18px] font-Quicksand font-bold px-[10px] py-[5px] md:py-[5px] block mx-2;
+    }
+    .nav_linkNonActive {
+        @apply my-[5px] md:my-0 rounded-xl text-[#3f3f3f] text-[15px] leading-[18px] md:text-[15px] md:leading-[18px] font-Quicksand font-bold px-[10px] py-[5px] md:py-[5px] block mx-2;
+    }
+
+    .new_msg {
+        @apply my-[5px] md:my-0 rounded-xl text-[#F1592A] text-[12px] md:text-[15px] leading-[18px] md:text-[15px] md:leading-[18px] font-Quicksand font-bold px-[10px] py-[5px] md:py-[5px] block mx-2;
+    }
+
+    .heading_sm {
+        @apply text-white text-[25px] leading-[25px] md:text-[40px] md:leading-[44px] uppercase font-Quicksand font-medium;
+    }
+    .heading_md {
+        @apply text-white text-[30px] leading-[35px] md:text-[60px] md:leading-[66px] uppercase font-Quicksand font-medium;
+    }
+    .heading_lg {
+        @apply text-white text-[35px] leading-[40px] md:text-[92px] md:leading-[101px] uppercase font-Quicksand font-medium;
+    }
+    .paragraph_sm {
+        @apply text-black text-[10px] leading-[10px] md:text-[15px] md:leading-[15px] uppercase font-Quicksand font-normal;
+    }
+    .nav_link {
+        text-shadow: 4px 4px 0 #000;
+        @apply text-white text-[28px] leading-[45px] md:text-[25px] md:leading-[25px] uppercase font-Quicksand font-normal px-[20px] py-1.5 md:py-3 block;
+    }
+
+    .footer_nav_link {
+        @apply text-white text-[12px] leading-[12px] md:text-[20px] md:leading-[20px] uppercase font-Quicksand font-normal px-[20px] py-1.5 md:py-3 block;
+    }
+    .section_py {
+        @apply py-[50px] md:py-[60px];
+    }
+
+    .container {
+        @apply mx-auto max-w-full px-5 md:px-0 lg:max-w-[1024px];
+    }
+    .text_spacing {
+        @apply mb-[20px] md:mb-[30px];
+    }
+
+    .border_soft {
+        border-color: rgba(255, 255, 255, 0.08);
+    }
+
+    .social_link {
+        @apply px-0 py-1 relative before:absolute before:bottom-[1px] before:-left-full before:w-full before:h-[0.5px] before:bg-white before:duration-150 group-hover:before:left-0 overflow-hidden;
+    }
+}
+
+.team_slider_wrapper .swiper-pagination-bullet {
+    background: rgba(255, 255, 255, 0.8) !important;
+    height: 6.5px !important;
+    transition: 0.4s ease;
+}
+
+.team_slider_wrapper .swiper-pagination-bullet.swiper-pagination-bullet-active {
+    background: #fff !important;
+    width: 25px !important;
+    border-radius: 10px !important;
+}
+
+@layer utilities {
+
+
+    .text_shadow_sm {
+        text-shadow: 2.5px 2.5px 0 #c39e53;
+    }
+    .text_shadow_lg {
+        text-shadow: 4px 4px 0 #c39e53;
+    }
+    .box_shadow_sm {
+        box-shadow: 2.5px 2.5px #c39e53;
+    }
+    .box_shadow_lg {
+        box-shadow: 4px 4px #c39e53;
+    }
+}
+
+.swiper-button-disabled {
+    opacity: 0.5 !important;
+    transition: 0.5s ease;
+}
+
+@media only screen and (max-width: 1024px) {
+    .mobile_nav_overly > ul {
+        overflow: auto !important;
+    }
+}
+
+
+
+input:checked ~ .dot {
+  transform: translateX(100%);
+  background-color: #48bb78;
+}
+
+.modal {
+  font-size: 12px;
+  background: #f5f5f5;
+}
+.modal > .header {
+  width: 100%;
+  border-bottom: 1px solid gray;
+  font-size: 18px;
+  text-align: center;
+  padding: 5px;
+}
+.modal > .content {
+  width: 100%;
+  padding: 10px 5px;
+}
+.modal > .actions {
+  width: 100%;
+  padding: 10px 5px;
+  margin: auto;
+  text-align: center;
+}
+.modal > .close {
+  cursor: pointer;
+  position: absolute;
+  display: block;
+  padding: 2px 5px;
+  line-height: 20px;
+  right: -10px;
+  top: -10px;
+  font-size: 24px;
+  background: #f5f5f5;
+  border-radius: 18px;
+  border: 1px solid #cfcece;
+}
+
+[class^="number-slide"],
+[class*=" number-slide"] {
+  width: 800px;
+  height: 80px;
+  color: #F1592A;
+  font-family: 'Quicksand', sans-serif;
+  font-weight: bold;
+}
+
+font-bold text-2xl text-[#F1592A] w-[280px] md:w-[400px] font-Quicksand
+
+.number-slide1 {
+
+
+}
+
+.number-slide2 {
+
+
+}
+
+.number-slide3 {
+
+
+}
+
+.number-slide4 {
+
+
+}
+
+.number-slide5 {
+
+
+}
+.number-slide6 {
+
+
+}

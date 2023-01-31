@@ -1,0 +1,745 @@
+import Image from "next/image";
+import { useMoralis } from "react-moralis";
+import styles from "../styles/Home.module.css";
+import styles2 from "../styles/search.module.css";
+//import Logo from "../Assets/MoralisLogo.png";
+import { useCallback, useRef, useState, useEffect } from "react";
+import { Magic } from 'magic-sdk';
+import Link from "next/link";
+import Popup from 'reactjs-popup';
+import { withRouter } from 'next/router';
+import Router from "next/router";
+import { useRouter } from 'next/router'
+import CreatableSelect from 'react-select/creatable';
+import Head from "next/head";
+
+
+
+export default function AddItem({tripId}) {
+  const { authenticate, isAuthenticated, authError, isAuthenticating , logout, Moralis} = useMoralis();
+
+  const [itemName, setItemName] = useState('');
+  const [itemBrand, setItemBrand] = useState('');
+  const [itemCostBeforeTax, setItemCostBeforeTax] = useState('');
+  const [itemRetailPrice, setItemRetailPrice] = useState('');
+  const [itemCostAfterTax, setItemCostAfterTax] = useState('');
+  const [whereBought, setWhereBought] = useState('');
+  const [itemImage, setItemImage] = useState(undefined);
+  const [itemReceipt, setItemReceipt] = useState(undefined);
+  const [itemShares, setItemShares] = useState(undefined);
+  const [itemSharesAvailable, setItemSharesAvailable] = useState(undefined);
+  const [itemSharesTaking, setItemSharesTaking] = useState(undefined);
+  const [itemBasicUnitsNo, setItemBasicUnitsNo] = useState('');
+  const [itemCode, setItemCode] = useState(undefined);
+  const [searchValue, setSearchValue] = useState('');
+  const [toBack, setToBack] = useState(false);
+  const [inputValue, setInputValue] = useState('');
+  const [selectedValues, setselectedValues] = useState({ selected: [] });
+  const [selection, setSelection] = useState(undefined)
+  const [takeUpAll, setTakeUpAll] = useState(true);
+
+
+
+  const [inputValue2, setInputValue2] = useState('');
+  const [selectedValues2, setselectedValues2] = useState({ selected: [] });
+  const [selection2, setSelection2] = useState(undefined)
+
+  const [submitted, setSubmitted] = useState(false);
+  const [imageUrl1, setImageUrl1] = useState('');
+  const [imageUrl2, setImageUrl2] = useState('');
+
+  const searchRef = useRef(null)
+  const [query, setQuery] = useState('')
+  const [active, setActive] = useState(false)
+  const [results, setResults] = useState([])
+  const [selectedFrSearchToAdd, setSelectedFrSearchToAdd] = useState(false)
+  const [itemRefImage, setItemRefImage] = useState(undefined);
+  const [itemRefPrice, setItemRefPrice] = useState(undefined);
+  const [itemRefUrl, setItemRefUrl] = useState(undefined);
+  const [alertMessage, setAlertMessage] = useState('');
+  const [open, setOpen] = useState(false);
+  //const router = useRouter()
+
+  const searchEndpoint = (query) => `/api/search?q=${query}`
+
+  const takeUpAllChecked = () => setTakeUpAll(value => !value);
+
+
+  useEffect(() => {
+    let theSelection=[]
+    if(true){
+      for(const i = 1; i < 11; i++){
+        theSelection.push({ value: i.toString(), label: i.toString() })
+
+      }
+    }
+    setSelection(theSelection)
+
+  }, []);
+
+  const handleInputChange = (value) => {
+    setInputValue(value);
+    console.log("handleInputChange value", value)
+  };
+
+  useCallback(
+    (node) => {
+      console.log(node);
+    },
+    [inputValue]
+  );
+
+  const handleInputChange2 = (value) => {
+    setInputValue2(value);
+    console.log("handleInputChange2 value", value)
+  };
+
+  useCallback(
+    (node2) => {
+      console.log(node2);
+    },
+    [inputValue2]
+  );
+
+  const handleOnChange = (e) => {
+
+    const newOption = { label: inputValue, inputValue };
+
+    inputValue !== '' && setSelection([...selection, newOption]);
+
+    setInputValue('');
+
+    setselectedValues(selection);
+    console.log("handleOnChange e.value", e.value)
+    setItemShares(e.value)
+
+    let theSelection2=[]
+    if(e.value>1){
+      for(const i = 1; i < (e.value/1); i++){
+        console.log("the i value:", i)
+        theSelection2.push({ value: i.toString(), label: i.toString() })
+
+      }
+    } else if (e.value==1){
+      var i=1
+      theSelection2.push({ value: i.toString(), label: i.toString() })
+    }
+    setSelection2(theSelection2)
+
+
+
+    //changeChartData({itemId:itemId, quantity: e.value})
+
+  };
+
+  const handleOnChange2 = (e) => {
+
+    const newOption2 = { label: inputValue2, inputValue2 };
+
+    inputValue2 !== '' && setSelection2([...selection2, newOption2]);
+
+    setInputValue2('');
+
+    setselectedValues2(selection2);
+
+    console.log("handleOnChange2 e.value", e.value)
+    setItemSharesTaking(e.value)
+
+    //changeChartData({itemId:itemId, quantity: e.value})
+
+  };
+
+  const onChange_searchToAdd = useCallback((event) => {
+    const query = event.target.value;
+    setQuery(event.target.value)
+    console.log("query.length at callback", query.length)
+    if (query.length > 0){
+      setTimeout(() => {
+        handleSearchToAdd(event.target.value)
+      }, 500);
+    } else if(event.target.value.length == 0){
+      setTimeout(() => {
+        setResults([])
+      }, 1000);
+    }
+  }, [])
+
+  const handleSearchToAdd = async (queryToSearch) => {
+
+  if (queryToSearch.length > 0) {
+    const params = {searchValue: queryToSearch}
+    const results = await Moralis.Cloud.run("returnSearchItemsToAdd", params)
+    if (results.length > 0){
+      var resultsToSet = []
+      for (let i = 0; i < results.length; i++){
+        resultsToSet.push({
+          indexNo: i+1,
+          itemName: results[i].attributes.itemName,
+          itemRefPrice: results[i].attributes.itemRefPrice,
+          itemRefImage: results[i].attributes.itemRefImage,
+          itemUrl: results[i].attributes.itemUrl,
+          itemCode: results[i].attributes.itemCode
+          //alertMessageData: alertMessageData,
+        })
+      }
+      console.log("results returned to add", resultsToSet)
+      setResults(resultsToSet)
+    }
+    else {
+    setResults([])
+    }
+  } else if(queryToSearch.length == 0){
+    setResults([])
+  }
+
+  }
+
+  const onFocus = useCallback(() => {
+    setActive(true)
+    window.addEventListener('click', onClick)
+  }, [])
+
+  const onClick = useCallback((event) => {
+    if (searchRef.current && !searchRef.current.contains(event.target)) {
+      setActive(false)
+      window.removeEventListener('click', onClick)
+    }
+  }, [])
+
+
+  const itemBasicUnitText = "* Total Number of Basic Units for this item:"
+
+  const displayAlert = (message) => {
+    setAlertMessage(message)
+    setOpen(true)
+  }
+
+  const closeModal = () => {
+  setOpen(false)
+  setAlertMessage('')
+  }
+
+  const keySubmit=(event)=> {
+        if (event.keyCode === 13) {
+          handleSearch()
+        }
+    }
+
+  const handleSearch = async () => {
+    if(searchValue.length == 0){
+      return
+    }
+    const params = {searchValue: searchValue}
+    const results = await Moralis.Cloud.run("returnSearchItemsToAdd", params)
+    console.log("searchResults: ", results)
+    if(results.length > 0){
+      var resultsToSet = []
+      for (let i = 0; i < results.length; i++){
+        var whereBoughtData = null
+        if (results[i].attributes.whereBought){
+          whereBoughtData = results[i].attributes.whereBought
+          //console.log("if wherebought", whereBoughtData)
+        }
+        resultsToSet.push({
+          indexNo: i+1,
+          itemName: results[i].attributes.itemName,
+          itemBrand: results[i].attributes.itemBrand,
+          itemRetailPrice: results[i].attributes.itemRetailPrice,
+          itemCostAfterTax: results[i].attributes.itemCostAfterTax,
+          itemBasicUnitsNo: results[i].attributes.itemBasicUnitsNo,
+          itemImage: results[i].attributes.itemImage,
+          whereBought: whereBoughtData,
+          itemCreator: results[i].attributes.ObjId,
+          itemId: results[i].id,
+          itemShares: results[i].attributes.itemShares,
+          itemSharesAvailable: results[i].attributes.itemSharesAvailable,
+          itemSharesTaking: results[i].attributes.itemSharesTaking
+          //alertMessageData: alertMessageData,
+        })
+      }
+      //console.log("resultsToSet", resultsToSet)
+      //setResultss(resultsToSet)
+    }
+  }
+
+  const handleItemFormSubmit = async () => {
+    if(!itemName){
+      displayAlert("Please Input Item Name")
+      return
+    }
+    if(!itemRetailPrice){
+      displayAlert("Please Input Item Price")
+      return
+    }
+    if(!itemShares){
+      displayAlert("Please Input Number of Share(s) Item is Splitting Into.")
+      return
+    }
+    if(!itemSharesTaking){
+      displayAlert("Please Input Number of Share(s) You are Taking Up.")
+      return
+    }
+    const userObj = Moralis.User.current()
+    if (!userObj.attributes.phoneNumber){
+      displayAlert("Your User Profile is not completed yet! Please complete first before listing items.")
+      //Router.push("/userProfile")
+      Router.push({
+                      pathname: '/userProfile',
+                  });
+      return
+    }
+
+    setSubmitted(true)
+    console.log("itemImage", itemImage)
+    var uploadItemImageResults
+    var uploadItemReceiptResults
+    var finalUploadItemImageResults
+
+    if (itemImage){
+    const uploadItemImage = new Moralis.File(itemImage.name, itemImage);
+    uploadItemImageResults = await uploadItemImage.saveIPFS();
+    console.log("uploadItemImageResults", uploadItemImageResults)
+    setImageUrl1(uploadItemImageResults._url)
+    finalUploadItemImageResults = uploadItemImageResults._url
+    }
+    else if (!itemRefImage){
+      setSubmitted(false)
+      displayAlert("Item Image not chosen.")
+      return
+    }
+    else if (!itemImage && itemRefImage){
+      finalUploadItemImageResults = itemRefImage
+    }
+
+    if (itemReceipt){
+    const uploadItemReceipt = new Moralis.File(itemReceipt.name, itemReceipt);
+    uploadItemReceiptResults = await uploadItemReceipt.saveIPFS();
+    console.log("uploadItemReceiptResults", uploadItemReceiptResults)
+    setImageUrl2(uploadItemReceiptResults._url)}
+
+    //const userObj = Moralis.User.current();
+
+    const TestItemData = Moralis.Object.extend("shoppingTripItemsData1");
+
+    const TestItemDataACL = new Moralis.ACL();
+    TestItemDataACL.setWriteAccess(userObj.id, true);
+    TestItemDataACL.setReadAccess(userObj.id, true); // after review only public can read
+    const testItemData = new TestItemData();
+    testItemData.setACL(TestItemDataACL);
+
+    const params = {
+      ObjId: userObj.id,
+      tripId: tripId,
+      itemName: itemName,
+      itemBrand: itemBrand,
+      itemRetailPrice: itemRetailPrice,
+      itemCostAfterTax: itemCostAfterTax,
+      itemBasicUnitsNo: itemBasicUnitsNo,
+      itemShares: itemShares,
+      itemSharesAvailable: itemSharesAvailable,
+      itemSharesTaking: itemSharesTaking,
+      whereBought: whereBought,
+      itemImage: finalUploadItemImageResults,
+      itemReceipt: itemReceipt ? uploadItemReceiptResults._url : null,
+      public: true,
+      archived: false,
+      teamChecked: false,
+      matched: false,
+      takeUpAll: takeUpAll,
+      itemCode: itemCode,
+    }
+    console.log("params", params)
+
+    testItemData
+      .save(params)
+      .then(
+        (results) => {
+          console.log("Submitted Results", results)
+          displayAlert("Submitted Successfully!")
+          // The object was saved successfully.
+        },
+        (error) => {
+          // The save failed.
+          // error is a Moralis.Error with an error code and message.
+        }
+      )
+
+      var es = document.forms[0].elements;
+
+      //es[1].onclick = function(){
+        //clearInputFile(es[0]);
+      //};
+
+      function clearInputFile(f){
+          if(f.value){
+              try{
+                  f.value = ''; //for IE11, latest Chrome/Firefox/Opera...
+              }catch(err){
+              }
+              if(f.value){ //for IE5 ~ IE10
+                  var form = document.createElement('form'), ref = f.nextSibling;
+                  form.appendChild(f);
+                  form.reset();
+                  ref.parentNode.insertBefore(f,ref);
+              }
+          }
+      }
+
+      for (const ele of es){
+        clearInputFile(ele)
+      }
+
+
+
+    setItemName('')
+    setItemBrand('')
+    setItemRetailPrice('')
+    setItemCostBeforeTax('')
+    setItemCostAfterTax('')
+    setWhereBought('')
+    setItemBasicUnitsNo('')
+    setItemShares(undefined)
+    setItemSharesTaking(undefined)
+    setItemImage(undefined)
+    setItemReceipt(undefined)
+    setSubmitted(false)
+
+  }
+
+
+  const onSelectItemImage = e => {
+    //console.log("e.target.files.length", e.target.files.length)
+        if (!e.target.files || e.target.files.length === 0) {
+            setItemImage(undefined)
+            return
+        }
+        //console.log("e.target.files[0]", e.target.files[0].name)
+        //using the first image instead of multiple
+        setItemImage(e.target.files[0])
+    }
+
+    const onSelectItemReceipt = e => {
+          if (!e.target.files || e.target.files.length === 0) {
+              setItemReceipt(undefined)
+              return
+          }
+
+          //using the first image instead of multiple
+          setItemReceipt(e.target.files[0])
+      }
+
+  return (
+    <div>
+    <Head>
+      <title>Shopping Trip | Split Sharing</title>
+      <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    </Head>
+    <Popup
+      open={open}
+      closeOnDocumentClick = {false}
+      onClose={closeModal}
+      contentStyle = {{
+        background: "rgba(0, 0, 0, 0.3)",
+        width: "100%",
+        height: "100%",
+      }}
+    >
+    {close => (
+      <div className="flex flex-col items-center">
+      <div className="rounded-xl border-2 border-black bg-white flex flex-col items-center w-[90vw] md:w-[500px] translate-y-[50vh] md:translate-y-[50vh]">
+
+
+
+        <div className="text-[18px] px-[10px] w-[90vw] md:w-[500px] text-center">
+          {alertMessage}
+        </div>
+
+
+        <div className="flex flex-col items-center w-full pt-[15px]">
+          <button
+            className="text-[17px] text-center"
+            onClick={() => {
+              setOpen(false)
+              if(alertMessage == "Submitted Successfully!"){
+                Router.push({
+                  pathname: '/shoppingTrip',
+                  query: { tripId: tripId,
+                          }
+                })
+              }
+              setAlertMessage('')
+            }}
+          >
+            close
+          </button>
+        </div>
+
+      </div>
+      </div>
+    )}
+    </Popup>
+    <div className="flex flex-col items-center bg-white pt-6 pb-6 flex flex-col items-center rounded-lg border-2 border-[#F1592A] md:w-auto">
+
+
+
+
+        {isAuthenticated && (
+          <div>
+
+          <div className='pl-[30px] flex flex-row w-[220px] justify-between h-[20px]'>
+            <div className ='text-[12px] font-bold items-center text-left'>
+            Add an Item to this <br />Costco Shopping Trip:
+            </div>
+
+
+            <div className="pt-[15px] flex items-center">
+              {!submitted ?
+              <button className={styles.loginButton3} type="button"
+              onClick={()=>{
+                console.log("test reset")
+                setSelectedFrSearchToAdd(false)
+                setItemRefImage('')
+                setItemRefPrice('')
+                setItemRetailPrice('')
+                setItemRefUrl('')
+                setItemCode('')
+                setWhereBought('')
+                setItemName('')
+                setQuery('')
+                setResults([])
+              }}
+              >
+                Reset
+              </button> :
+              <p>Uploading Item</p>}
+            </div>
+          </div>
+
+          <div
+            className="px-6 w-80 relative md:w-[400px] pt-[30px] pb-[10px]"
+            ref={searchRef}
+          >
+            <input
+              className="border-2 border-[#F1592A] rounded-xl text-gray-700 h-[35px] w-full text-left pl-1 md:pl-2 text-sm font-Quicksand font-bold"
+              onChange={onChange_searchToAdd}
+              onFocus={onFocus}
+              placeholder='Search to Add'
+              type='text'
+              value={query}
+            />
+            { active && results.length > 0 && (
+              <div className="translate-y-[5px] z-100 h-[600px] z-50 absolute overflow-y-scroll bg-[#f5f5f5] w-[300px] md:w-[380px] px-6 left-[10px] md:left-[10px] rounded-xl">
+              <div className="text-[12px] pt-[8px]">No. of Results: {results.length}</div>
+              <ul>
+                {results.map(({ indexNo, itemName, itemRefImage, itemRefPrice, itemUrl, itemCode}) => (
+                  <button className="rounded bg-[#0070f3] py-[8px] px-[8px] mt-[9px] z-101 text-[12px] text-[#eee] w-full text-left" key={indexNo}
+                      onClick={()=>{
+                      setActive(false)
+                      setSelectedFrSearchToAdd(true)
+                      setItemRefImage(itemRefImage)
+                      setItemRefPrice(itemRefPrice)
+                      setItemRetailPrice(itemRefPrice)
+                      setItemRefUrl(itemUrl)
+                      setItemCode(itemCode)
+                      setWhereBought("Costco")
+                      setItemName(itemName)}}>
+                      <a>{itemName}</a>
+                  </button>
+                ))}
+              </ul>
+              </div>
+            ) }
+          </div>
+
+
+          <form className="px-6 w-80 relative md:w-auto">
+            <div className="absolute top-[-114px] right-[5px]">
+
+              <button type="button" className="bg-[#F2F2F2] rounded-md p-2 inline-flex items-center justify-center text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500"
+              onClick={()=>{
+                if(true){
+
+
+                Router.push({
+                  pathname: '/shoppingTrip',
+                  query: { tripId: tripId,
+                          }
+                })
+              }
+
+              }}
+
+
+
+              >
+              <span className="sr-only">Close menu</span>
+              <svg className="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+              </button>
+
+            </div>
+
+
+
+            <div className="mb-3">
+              <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="itemName">
+                * Item Name
+              </label>
+              <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              id="itemName" type="text" placeholder="Paper Towels" value={itemName}
+              onChange={(e) => {
+                setItemName(e.target.value);
+              }}
+              />
+            </div>
+            <div className="mb-3">
+              <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="itemBrand">
+                Item Brand (optional)
+              </label>
+              <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              id="itemBrand" type="text" placeholder="Bounty" value={itemBrand}
+              onChange={(e) => {
+                setItemBrand(e.target.value);
+              }}
+              />
+            </div>
+
+            <div className="mb-3">
+              <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="itemRetailPrice">
+                * Expected Entire Item Price (Tax Excluded) <br /><span className="text-xs">(This price is the expected price reference.) <br /> </span>
+              </label>
+              { selectedFrSearchToAdd ?
+                <div>
+                  <div className="w-[250px] md:w-[320px] text-[#0070f3]">
+                    Below is the expected price only.
+                  </div>
+                  <div className="w-[250px] md:w-[320px] text-[red]">
+                    ${itemRetailPrice}
+                  </div>
+                </div>
+              :
+              <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              id="itemRetailPrice" type="number" placeholder="18.99" value={itemRetailPrice}
+              onChange={(e) => {
+                setItemRetailPrice(e.target.value);
+              }}
+              />
+              }
+            </div>
+
+            <div className="mb-3 flex flex-row items-end justify-between">
+              <div className="mb-3 mr-2">
+                <label className="block text-gray-700 text-sm font-bold mb-2">
+                  * Number of  <br/> Share(s) Item <br/>  is Splitting Into:
+
+                </label>
+
+                <CreatableSelect
+                  className="text-[12px] lg:text-[13px]"
+                  options={selection}
+                  onChange={handleOnChange}
+                  isSearchable={false}
+                  onInputChange={handleInputChange}
+                  inputValue={inputValue}
+                  value={selectedValues.selected}
+                  controlShouldRenderValue={true}
+                />
+                <div className="text-[11px] pt-[5px]">
+                If you are taking up <br/><span className="font-bold"> Entire Item</span>, <br/>please select 1.
+                </div>
+              </div>
+              <div className="mb-3 ml-2">
+                <label className="block text-gray-700 text-sm font-bold mb-2">
+                  * Number of  <br/> Share(s) You are <br/>Taking Up:
+                </label>
+
+                <CreatableSelect
+                  className="text-[12px] lg:text-[13px]"
+                  options={selection2}
+                  onChange={handleOnChange2}
+                  isSearchable={false}
+                  onInputChange={handleInputChange2}
+                  inputValue={inputValue2}
+                  value={selectedValues2.selected}
+                  controlShouldRenderValue={true}
+                />
+                <div className="text-[11px] pt-[5px]">
+                If you are taking up <br/> <span className="font-bold"> Entire Item</span>, <br/>please select 1.
+                </div>
+              </div>
+            </div>
+            <div className="mb-3">
+              <label className="block text-gray-700 text-sm font-bold mb-2">
+                Price per Share: <span className='text-[red]'>{itemRetailPrice && itemShares && "$"+(itemRetailPrice/itemShares).toFixed(2)}</span>
+              </label>
+            </div>
+            <div className="mb-3">
+              <label className="block text-gray-700 text-sm font-bold mb-2">
+                Share(s) Outstanding: <span className='text-[red]'> {itemShares && itemSharesTaking && itemShares-itemSharesTaking} </span>
+              </label>
+            </div>
+
+
+            { selectedFrSearchToAdd &&
+              <div className="pb-[10px]">
+                <div className="w-[250px] md:w-[320px] text-[#0070f3]">
+                  Below is a reference image. If no image is uploaded, it will be set as your listing image when submitted.
+                </div>
+                <div>
+                  <img src={itemRefImage} className="w-full"/>
+                </div>
+                <a className="w-[250px] md:w-[320px] text-[#0070f3]" href={itemRefUrl} target="_blank" rel="noreferrer">
+                  Product reference Link (Click to Check)
+                </a>
+              </div>
+            }
+
+            <div className="block text-gray-700 text-sm font-bold mb-2 pt-[20px]">
+              * Item Image
+            </div>
+            <div className="mb-3">
+
+              <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="itemImage" type='file' onChange={onSelectItemImage} name="Item_Image" />
+            </div>
+
+            <div className="flex items-center justify-center w-full py-[20px]">
+
+              <label htmlFor="toggleB" className="flex items-center cursor-pointer">
+
+                <div className="relative">
+
+                  <input type="checkbox" id="toggleB" className="sr-only" checked={takeUpAll} onChange={takeUpAllChecked}/>
+
+                  <div className="block bg-gray-600 w-14 h-8 rounded-full"></div>
+
+                  <div className="dot absolute left-1 top-1 bg-white w-6 h-6 rounded-full transition"></div>
+                </div>
+
+                <div className="ml-3 text-gray-700 font-medium">
+                  *Willing to take up <span className="font-bold">all share(s)</span> <br />if not matched with other Sharees.
+                </div>
+              </label>
+
+            </div>
+
+            <div className="pt-2 flex items-center justify-between">
+              {!submitted ?
+              <button className={styles.loginButton} type="button"
+              onClick={handleItemFormSubmit}
+              >
+                Submit
+              </button> :
+              <p>Uploading Item</p>}
+            </div>
+
+
+          </form>
+          </div>
+
+      )}
+
+    </div>
+    </div>
+  );
+}

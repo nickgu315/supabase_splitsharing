@@ -1,0 +1,39 @@
+.container {
+  position: relative;
+}
+
+.search {
+  border: 2px solid #666;
+  box-sizing: border-box;
+  font-size: 12px;
+  padding: 6px;
+  width: 100%;
+}
+
+.results {
+  list-style: none;
+  overflow: scroll;
+  margin: 9px 0 0;
+  padding: 0;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  height: 500px;
+  z-index: 289;
+}
+
+.result {
+  background: #0070f3;
+  color: #eee;
+  margin: 0 0 9px;
+  padding: 8px;
+  z-index: 289;
+  font-size: 12px;
+}
+
+.result a {
+  color: #eee;
+  z-index: 289;
+  font-size: 12px;
+}

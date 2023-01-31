@@ -1,0 +1,304 @@
+.backgroundParent {
+  height: 100vh;
+  display: grid;
+  align-items: center;
+  justify-content: center;
+  background-image: linear-gradient(
+      141.34deg,
+      rgba(104, 81, 255, 0.2) 20.76%,
+      hsla(19, 94%, 74%, 0.34) 75.09%
+    ),
+    linear-gradient(0deg, #fff, #fff);
+}
+.card {
+  width: 250px;
+  height: 250px;
+  background-color: black;
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  justify-content: space-between;
+  text-align: center;
+}
+
+.buttonCard {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+  border-radius: 10px;
+  border-color: #F1592A;
+  font-weight: bold;
+}
+
+.loginButton {
+  padding: 10px;
+  border-radius: 10px;
+  border-width: 0px;
+  color: white;
+  background-image: linear-gradient(90deg, #F1592A, #d18873);
+  width: 100%;
+  cursor: pointer;
+  font-family: 'Quicksand', sans-serif;
+  font-weight: bold;
+}
+
+.loginButton1 {
+  padding: 10px;
+  border-radius: 10px;
+  border-width: 0px;
+  color: white;
+  background-image: linear-gradient(90deg, #0070f3, #d18873);
+  width: 100%;
+  cursor: pointer;
+  font-family: 'Quicksand', sans-serif;
+  font-weight: bold;
+}
+
+.loginButton2 {
+  padding: 8px;
+  border-radius: 10px;
+  border-width: 0px;
+  color: white;
+  background-image: linear-gradient(90deg, #808080, #d18873);
+  width: 100%;
+  cursor: pointer;
+  font-family: 'Quicksand', sans-serif;
+  font-weight: bold;
+  font-size: 11px;
+  position: relative;
+}
+
+.loginButton3 {
+  padding: 7px;
+  border-radius: 10px;
+  border-width: 0px;
+  color: white;
+  background-image: linear-gradient(90deg, #808080, #d18873);
+  width: 100%;
+  cursor: pointer;
+  font-family: 'Quicksand', sans-serif;
+  font-weight: normal;
+  font-size: 14px;
+  position: relative;
+}
+
+.ShoppingTripButton1 {
+  padding: 5px;
+  border-radius: 10px;
+  border-width: 0px;
+  color: white;
+  background-image: linear-gradient(90deg, #0070f3, #d18873);
+  width: 100%;
+  cursor: pointer;
+  font-family: 'Quicksand', sans-serif;
+  font-weight: bold;
+  height: 60px;
+}
+
+.ShoppingTripButton2 {
+  padding: 5px;
+  border-radius: 10px;
+  border-width: 0px;
+  color: white;
+  background-image: linear-gradient(90deg, #F1592A, #d18873);
+  width: 100%;
+  cursor: pointer;
+  font-family: 'Quicksand', sans-serif;
+  font-weight: bold;
+  height: 60px;
+  width: 60px;
+}
+
+.DatePickButton {
+  padding: 5px;
+  border-radius: 10px;
+  border-width: 0px;
+  color: white;
+  background-image: linear-gradient(90deg, #0070f3, #d18873);
+  width: 100%;
+  cursor: pointer;
+  font-family: 'Quicksand', sans-serif;
+  font-weight: bold;
+  height: 40px;
+}
+
+
+.ButtonSharingShopping {
+  padding: 10px;
+  border-radius: 10px;
+  border-width: 0px;
+  color: white;
+  background-image: linear-gradient(90deg, #0070f3, #d18873);
+  width: 100%;
+  cursor: pointer;
+  font-family: 'Quicksand', sans-serif;
+  font-weight: bold;
+}
+
+.ButtonSharingShopping2 {
+  width: 286px;
+  padding: 10px;
+  border-radius: 10px;
+  border-width: 0px;
+  color: white;
+  background-image: linear-gradient(90deg, #0070f3, #d18873);
+  cursor: pointer;
+  font-family: 'Quicksand', sans-serif;
+  font-weight: bold;
+}
+
+.ButtonSharingShopping3 {
+  width: 75px;
+  padding: 10px;
+  border-radius: 10px;
+  border-width: 0px;
+  color: white;
+  background-image: linear-gradient(90deg, #0070f3, #d18873);
+  cursor: pointer;
+  font-family: 'Quicksand', sans-serif;
+  font-weight: bold;
+}
+
+
+.clearButton {
+  padding: 10px;
+  border-radius: 10px;
+  border-width: 0px;
+  color: black;
+  background-image: linear-gradient(90deg, #F2F2F2, #F8F8F8);
+  width: 100%;
+  cursor: pointer;
+  font-family: 'Quicksand', sans-serif;
+}
+
+.connectButton {
+  padding: 8px;
+  border-radius: 10px;
+  border-width: 0px;
+  color: white;
+  background-image: linear-gradient(90deg, #F1592A, #d18873);
+  width: 100%;
+  cursor: pointer;
+  font-size: 9px;
+  font-family: 'Quicksand', sans-serif;
+  font-weight: bold;
+  -moz-box-shadow:    1px 3px 4px #ccc;
+  -webkit-box-shadow: 1px 3px 4px #ccc;
+  box-shadow:         1px 3px 4px #ccc;
+}
+
+.connectButtonBlue {
+  padding: 8px;
+  border-radius: 10px;
+  border-width: 0px;
+  color: white;
+  background-image: linear-gradient(90deg, #0070f3, #d18873);
+  width: 100%;
+  cursor: pointer;
+  font-size: 9px;
+  font-family: 'Quicksand', sans-serif;
+  font-weight: bold;
+  -moz-box-shadow:    1px 3px 4px #ccc;
+  -webkit-box-shadow: 1px 3px 4px #ccc;
+  box-shadow:         1px 3px 4px #ccc;
+}
+
+.seeMoreButton {
+  padding: 8px;
+  border-radius: 10px;
+  border-width: 0px;
+  color: black;
+  background-image: linear-gradient(90deg, white, white);
+  width: 100%;
+  cursor: pointer;
+  font-size: 9px;
+  font-family: 'Quicksand', sans-serif;
+  font-weight: bold;
+  -moz-box-shadow:    1px 3px 4px #ccc;
+  -webkit-box-shadow: 1px 3px 4px #ccc;
+  box-shadow:         1px 3px 4px #ccc;
+}
+
+.connectButton2 {
+  padding: 5px;
+  border-radius: 6px;
+  border-width: 0px;
+  color: white;
+  background-image: linear-gradient(90deg, #F1592A, #d18873);
+  width: 100%;
+  cursor: pointer;
+  font-size: 8px;
+  font-family: 'Quicksand', sans-serif;
+  font-weight: bold;
+  -moz-box-shadow:    1px 3px 4px #ccc;
+  -webkit-box-shadow: 1px 3px 4px #ccc;
+  box-shadow:         1px 3px 4px #ccc;
+}
+
+.seeMoreButton2 {
+  padding: 5px;
+  border-radius: 6px;
+  border-width: 0px;
+  color: black;
+  background-image: linear-gradient(90deg, white, white);
+  width: 100%;
+  cursor: pointer;
+  font-size: 8px;
+  font-family: 'Quicksand', sans-serif;
+  font-weight: bold;
+  -moz-box-shadow:    1px 3px 4px #ccc;
+  -webkit-box-shadow: 1px 3px 4px #ccc;
+  box-shadow:         1px 3px 4px #ccc;
+}
+
+@media only screen and (min-width: 700px) {
+    .modalLearnMore1 {
+
+      width: 640px;
+    }
+}
+
+@media only screen and (max-width: 700px) {
+  .modalLearnMore1 {
+
+    width: 320px;
+  }
+}
+
+.error {
+  color: red;
+  font-size: 10px;
+}
+.green {
+  color: green;
+}
+
+.img {
+  object-fit: contain;
+}
+
+.input {
+  padding: 10px;
+  border-radius: 10px;
+  border-color: #F1592A;
+  margin-bottom: 20px;
+  background-color: white;
+  font-family: 'Quicksand', sans-serif;
+  font-weight: bold;
+}
+
+input:checked ~ .dot {
+  transform: translateX(100%);
+  background-color: #48bb78;
+}
+
+.modal {
+    transition: opacity 0.25s ease;
+    }
+    body.modal-active {
+    overflow-x: hidden;
+    overflow-y: visible !important;
+    }
+    .opacity-95 {opacity: .95;}
