@@ -25,7 +25,7 @@ const animation = { duration: 5000, easing: t => 1 + --t * t * t * t * t * t * t
 
 
 function signin() {
-  //const { authenticate, isAuthenticated, authError, isAuthenticating , logout, Moralis, isInitialized, ...rest} = useMoralis()
+  const { authenticate, isAuthenticated, authError, isAuthenticating , logout, Moralis, isInitialized, ...rest} = useMoralis()
   const [isDesktop, setIsDesktop] = useState(false)
   const [haveNewMessages, setHaveNewMessages] = useState(false)
   const [userId, setUserId] = useState('')
@@ -56,7 +56,23 @@ function signin() {
   }
 
 
+  const handleCustomLogin0 = async () => {
+    const user = new Moralis.User();
+    user.set("username", "my_name");
+    user.set("password", "my_pass");
+    user.set("email", email);
 
+    // other fields can be set just like with Moralis.Object
+    user.set("phone", "415-392-0202");
+    try {
+      await user.signUp();
+      console.log('SignUp Successful!')
+      // Hooray! Let them use the app now.
+    } catch (error) {
+      // Show the error message somewhere and let the user try again.
+      alert("Error: " + error.code + " " + error.message);
+    }
+  }
 
   const handleCustomLogin = async () => {
     // Enabling the debug mode flag is useful during implementation,
@@ -128,7 +144,50 @@ function signin() {
         </Head>
         <Header/>
         <div className="flex flex-col items-center pt-[120px]">
-        
+          {!isAuthenticated && (
+              <div className="pt-[20px] lg:pt-0 lg:px-10 w-[180px] lg:w-[240px] xl:w-[300px]">
+                  {isAuthenticating &&
+
+                    <div>
+                      <div ref={sliderRef} className="keen-slider">
+                        <div className="keen-slider__slide number-slide1 block text-[#F1592A] text-lg font-bold text-center font-Quicksand">Authenticating...</div>
+                        <div className="keen-slider__slide number-slide2 block text-[#F1592A] text-lg font-bold text-center font-Quicksand">Authenticating...</div>
+                        <div className="keen-slider__slide number-slide3 block text-[#F1592A] text-lg font-bold text-center font-Quicksand">Authenticating...</div>
+                        <div className="keen-slider__slide number-slide4 block text-[#F1592A] text-lg font-bold text-center font-Quicksand">Redirecting...</div>
+                        <div className="keen-slider__slide number-slide5 block text-[#F1592A] text-lg font-bold text-center font-Quicksand">Redirecting...</div>
+                        <div className="keen-slider__slide number-slide6 block text-[#F1592A] text-lg font-bold text-center font-Quicksand">Redirecting...</div>
+                      </div>
+                    </div>
+                    }
+                  {authError && (
+                    <p className={styles.error}>{JSON.stringify(authError.message)}</p>
+                  )}
+                  {!isAuthenticating &&
+                    <div>
+                    <div className={styles.buttonCard}>
+                      <input
+                        type={"email"}
+                        onKeyDown={(e) => keySubmit(e) }
+                        className="border-2 border-[#F1592A] rounded-xl mb-5 w-full h-11 py-2 px-3 text-gray-700 font-bold font-Quicksand"
+                        placeholder="Email"
+                        value={email}
+                        onChange={(e) => {
+                          setEmail(e.target.value);
+                        }}
+                      />
+
+                        <button className={styles.loginButton} onClick={handleCustomLogin}>
+                          Sign Up or Login
+                        </button>
+
+                    </div>
+
+
+                    </div>
+
+                  }
+              </div>
+              )}
               {!session ? (
         <div className="row">
           <div className="col-6 auth-widget">
