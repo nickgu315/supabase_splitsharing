@@ -5,8 +5,10 @@ import '../styles/globals.css'
 import {MoralisProvider} from "react-moralis"
 import { gsap } from 'gsap';
 import { GoogleAnalytics, usePageViews } from "nextjs-google-analytics";
-import { useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
+import { createBrowserSupabaseClient } from '@supabase/auth-helpers-nextjs'
+import { SessionContextProvider, Session } from '@supabase/auth-helpers-react'
 
 
 const ScrollTrigger = require('gsap/dist/ScrollTrigger')
@@ -17,6 +19,7 @@ gsap.registerPlugin(ScrollTrigger)
 
 function MyApp({ Component, pageProps }) {
   const router = useRouter()
+  const [supabaseClient] = useState(() => createBrowserSupabaseClient())
 
   useEffect(() => {
     import('react-facebook-pixel')
@@ -32,15 +35,22 @@ function MyApp({ Component, pageProps }) {
   }, [router.events])
 
 
-  return (<MoralisProvider
-    appId = {process.env.NEXT_PUBLIC_MORALIS_APP_ID}
-    serverUrl = {process.env.NEXT_PUBLIC_MORALIS_SERVER_URL}>
-      { <>
-        <GoogleAnalytics />
-        <Component {...pageProps} />
-        </>
-      }
-    </MoralisProvider>
+  return (
+    <SessionContextProvider
+    supabaseClient={supabaseClient}
+    initialSession={pageProps.initialSession}
+    >
+  
+      <MoralisProvider
+        appId = {process.env.NEXT_PUBLIC_MORALIS_APP_ID}
+        serverUrl = {process.env.NEXT_PUBLIC_MORALIS_SERVER_URL}>
+          { <>
+            <GoogleAnalytics />
+            <Component {...pageProps} />
+            </>
+          }
+      </MoralisProvider>
+    </SessionContextProvider>
     )
 }
 

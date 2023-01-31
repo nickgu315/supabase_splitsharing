@@ -1,3 +1,4 @@
+import { Auth, ThemeSupa } from '@supabase/auth-ui-react'
 import { useRouter } from "next/router"
 import Header from "../components/Header";
 import Footer from "../components/Footer";
@@ -12,13 +13,16 @@ import SharingListPublic_SignedIn from "../components/SharingListPublic_SignedIn
 import {MoralisProvider} from "react-moralis"
 import mixpanel from 'mixpanel-browser';
 import CookieConsent from "react-cookie-consent";
-import { useKeenSlider } from "keen-slider/react"
+import { useKeenSlider } from "keen-slider/react";
 import { Magic } from 'magic-sdk';
+import { useSession, useSupabaseClient } from '@supabase/auth-helpers-react';
 
 
 
 
 const animation = { duration: 5000, easing: t => 1 + --t * t * t * t * t * t * t * t * t * t * t}
+
+
 
 function signin() {
   const { authenticate, isAuthenticated, authError, isAuthenticating , logout, Moralis, isInitialized, ...rest} = useMoralis()
@@ -28,6 +32,8 @@ function signin() {
   const router = useRouter()
   const [resultss, setResultss] = useState(undefined);
   const [email, setEmail] = useState('');
+  const session = useSession()
+  const supabase = useSupabaseClient()
 
   const isDesktopOrLaptop = useMediaQuery({
     query: '(min-width: 768px)'
@@ -182,6 +188,31 @@ function signin() {
                   }
               </div>
               )}
+              {!session ? (
+        <div className="row">
+          <div className="col-6 auth-widget">
+            <Auth
+               supabaseClient={supabase}
+               appearance={{
+                 theme: ThemeSupa,
+                 variables: {
+                   default: {
+                     colors: {
+                       brand: '#F1592A',
+                       brandAccent: '#F1592A',
+                     },
+                   },
+                 },
+               }}
+            />
+          </div>
+        </div>
+      ) : (
+        <>
+          <h3>Account</h3>
+          <Account session={session} />
+        </>
+      )}
         </div>
     </div>
   )
