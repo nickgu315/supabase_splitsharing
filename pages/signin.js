@@ -150,8 +150,8 @@ function signin() {
         </div>
       ) : (
         <>
-          <h3>Account</h3>
-          <Account session={session} />
+          <h3>Signed In Successfully</h3>
+          
         </>
       )}
         </div>
